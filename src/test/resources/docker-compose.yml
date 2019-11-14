@@ -1,0 +1,24 @@
+version: '2'
+services:
+  redis:
+    image: "redis:latest"
+    networks:
+      net:
+        aliases:
+          - redis
+    ports:
+      - "6379:6379"
+
+  springio:
+    image: "springio/gs-spring-boot-docker:latest"
+    networks:
+      - net
+    depends_on:
+      - redis
+    ports:
+      - "8080:8080"
+      - "5000:5000"
+    environment:
+      JAVA_OPTS: "-Xmx256m -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5111"
+networks:
+  net:
